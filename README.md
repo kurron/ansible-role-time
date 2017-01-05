@@ -1,8 +1,7 @@
 Role Name
 =========
 
-Disabling of Transparent Huge Pages (THP).  Database
-workloads do not do well with THP enabled.
+Configuring time zones and NTP services.  Needed in AWS EC2 environments.
 
 Requirements
 ------------
@@ -12,7 +11,7 @@ TODO
 Role Variables
 --------------
 
-* thp_disable: true
+TODO
 
 Dependencies
 ------------
@@ -25,7 +24,7 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-      - { role: kurron.transparent-huge-pages }
+      - { role: kurron.time }
 ```
 
 License

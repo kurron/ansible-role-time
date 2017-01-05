@@ -1,46 +1,19 @@
 ---
-- name: Install Disable THP Service
-  become: yes
-  template:
-      src: "templates/disable-transparent-huge-pages.service.j2"
-      dest: "/etc/systemd/system/disable-transparent-huge-pages.service"
-      mode: 0555
-  when: thp_disable
-
-- name: Enable Service
-  become: yes
-  systemd:
-      name: disable-transparent-huge-pages.service
-      enabled: yes
-      daemon_reload: yes
-      state: restarted
-  when: thp_disable
-
-- name: Test Changes
-  command: "cat /sys/kernel/mm/transparent_hugepage/enabled"
-  when: thp_disable
-
-- name: Test Changes
-  command: "cat /sys/kernel/mm/transparent_hugepage/defrag"
-  when: thp_disable
-
-- name: Create Tuned Directory
+- name: Remove Existing Timezone File
   become: yes
   file:
-      path: "/etc/tuned/no-thp"
-      state: directory
-      mode: 0755
-  when: thp_disable and (ansible_distribution == "RedHat")
+      path: /etc/localtime
+      state: absent
+  when: time_install
 
-- name: Install Disable THP Tuned Configuration
+- name: Link Specified Timezone File
   become: yes
-  template:
-      src: "templates/tuned.conf.j2"
-      dest: "/etc/tuned/no-thp/tuned.conf"
-      mode: 0555
-  when: thp_disable and (ansible_distribution == "RedHat")
+  file:
+      src: "/usr/share/zoneinfo/{{ time_timezone }}"
+      path: "/etc/localtime"
+      state: link
+  when: time_install
 
-- name: Tickle Tuned
-  become: yes
-  command: "tuned-adm profile no-thp"
-  when: thp_disable and (ansible_distribution == "RedHat")
+- name: Test Timezone Changes
+  command: "date"
+  when: time_install
