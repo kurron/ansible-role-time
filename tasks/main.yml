@@ -2,11 +2,11 @@
 - name: Set Timezone
   become: yes
   command: "timedatectl set-timezone {{ time_timezone }}"
-  when: time_install and (ansible_distribution == "RedHat")
+  when: time_install
 
 - name: Test Timezone Changes
   command: "timedatectl"
-  when: time_install and (ansible_distribution == "RedHat")
+  when: time_install
 
 - name: Verify Chrony Is Running
   command: "chronyc tracking"
