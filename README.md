@@ -11,7 +11,8 @@ TODO
 Role Variables
 --------------
 
-TODO
+* time_install: true
+* time_timezone: UTC
 
 Dependencies
 ------------
@@ -24,7 +25,7 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-      - { role: kurron.time }
+      - { role: kurron.time, time_timezone:  America/New_York }
 ```
 
 License
