@@ -1,19 +1,9 @@
 ---
-- name: Remove Existing Timezone File
+- name: Set Timezone
   become: yes
-  file:
-      path: /etc/localtime
-      state: absent
-  when: time_install
-
-- name: Link Specified Timezone File
-  become: yes
-  file:
-      src: "/usr/share/zoneinfo/{{ time_timezone }}"
-      path: "/etc/localtime"
-      state: link
-  when: time_install
+  command: "timedatectl set-timezone {{ time_timezone }}"
+  when: time_install and (ansible_distribution == "RedHat")
 
 - name: Test Timezone Changes
-  command: "date"
-  when: time_install
+  command: "timedatectl"
+  when: time_install and (ansible_distribution == "RedHat")
